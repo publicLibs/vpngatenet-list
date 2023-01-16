@@ -22,7 +22,7 @@ public class VpnConfStreams {
 	}
 
 	public static Stream<VpnConf> sortBySpeed(final Stream<VpnConf> vpnConfStream) {
-		return vpnConfStream.sorted(Comparator.comparingInt(VpnConf::getSpeed).reversed());
+		return vpnConfStream.sorted(Comparator.comparingLong(VpnConf::getSpeed).reversed());
 	}
 
 	public static Stream<VpnConf> sortNFasters(final Stream<VpnConf> vpnConfStream, final long count) {

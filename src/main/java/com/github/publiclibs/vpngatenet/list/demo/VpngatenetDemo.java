@@ -4,6 +4,10 @@
 package com.github.publiclibs.vpngatenet.list.demo;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.github.publiclibs.vpngatenet.list.utils.VpnConfUtils;
 import com.github.publiclibs.vpngatenet.list.utils.VpnGateNetFetcher;
@@ -18,9 +22,27 @@ public class VpngatenetDemo {
 	 * @param args
 	 * @throws IOException
 	 */
-	public static void main(final String[] args) throws IOException {
-		final var fastStream = VpnGateNetFetcher.fetchFastCountry(10, "JP");
-		fastStream.forEachOrdered((final var conf) -> System.err.println(VpnConfUtils.toOvpnConf(conf)));
+	public static void main(final String[] args) throws IOException, GeneralSecurityException {
+		final var fastStream = VpnGateNetFetcher.fetchFast();
+		final var a = new AtomicInteger();
+
+		fastStream.forEachOrdered((final var conf) -> {
+
+			final var fName = a.getAndIncrement() + "-" + conf.speed + "-" + conf.countryShort + "-" + conf.proto + "-"
+					+ conf.host + "-" + conf.port + ".conf";
+
+			System.err.println("append_vpn_serviceList " + conf.host);
+
+			final var path = Paths.get("data", fName);
+			try {
+				Files.createDirectories(path.getParent());
+				Files.createFile(path);
+				final var data = VpnConfUtils.toOvpnConf(conf);
+				Files.writeString(path, data);
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 }

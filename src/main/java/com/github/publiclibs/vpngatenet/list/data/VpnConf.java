@@ -34,7 +34,7 @@ public class VpnConf {
 
 	public String countryShort;
 
-	public int speed;
+	public long speed;
 
 	public int verb;
 
@@ -66,7 +66,7 @@ public class VpnConf {
 		return ping;
 	}
 
-	public int getSpeed() {
+	public long getSpeed() {
 		return speed;
 	}
 
