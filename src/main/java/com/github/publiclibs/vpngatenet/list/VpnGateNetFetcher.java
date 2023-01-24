@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.github.publiclibs.vpngatenet.list.utils;
+package com.github.publiclibs.vpngatenet.list;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +11,8 @@ import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
 import com.github.publiclibs.vpngatenet.list.data.VpnConf;
+import com.github.publiclibs.vpngatenet.list.utils.VpnConfStreams;
+import com.github.publiclibs.vpngatenet.list.utils.VpnConfUtils;
 
 /**
  * @author freedom1b2830

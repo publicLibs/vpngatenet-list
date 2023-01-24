@@ -32,11 +32,7 @@ public class VpnConfUtils {
 		final Builder<VpnConf> streamBuilder = Stream.builder();
 		cSVs.parallelStream().forEachOrdered(line -> {
 			if (sanitize(line)) {
-				try {
-					streamBuilder.add(parseCSV(line));
-				} catch (final IOException e) {
-					e.printStackTrace();
-				}
+				streamBuilder.add(parseCSV(line));
 			}
 		});
 		return streamBuilder.build();
@@ -47,12 +43,11 @@ public class VpnConfUtils {
 		if (path == null) {
 			throw new InputException("path==null");
 		}
-
 		final var cSVs = Files.readAllLines(path, UTF_8);
 		return parseCSV(cSVs);
 	}
 
-	public static VpnConf parseCSV(final String fullCsv) throws IOException {
+	public static VpnConf parseCSV(final String fullCsv) {
 		if (fullCsv == null) {
 			throw new InputException("fullCsv==null");
 		}
@@ -62,65 +57,48 @@ public class VpnConfUtils {
 			throw new InputException(String.format("[%s] %s", fullCsv, Arrays.toString(fullCsv.getBytes(UTF_8))));
 		}
 
-		int ping;
-		String countryLong;
-		String countryShort;
-		int numVpnSessions;
-		String uptime;
-		int totalUsers;
-		long totalTraffic;
-		String logType;
-		String operator;
-		String message;
-		String openVPN_ConfigData_Base64;
-
-		String id;
-		String host;
-		int score;
-		String decodedString;
-		long speed;
-		try {
-			id = params[0];
-			host = params[1];
-			score = Integer.parseInt(params[2]);
-
-			if (params[3].equals("-")) {
-				ping = -1;
-			} else {
-				ping = Integer.parseInt(params[3]);
-			}
-
-			speed = Long.parseLong(params[4]);
-			countryLong = params[5];
-			countryShort = params[6];
-			numVpnSessions = Integer.parseInt(params[7]);
-			uptime = params[8];
-			totalUsers = Integer.parseInt(params[9]);
-			totalTraffic = Long.parseLong(params[10]);
-			logType = params[11];// 2weeks
-			operator = params[12];
-			message = params[13];
-			openVPN_ConfigData_Base64 = params[14];
-			final var decodedBytes = Base64.getDecoder().decode(openVPN_ConfigData_Base64);
-			decodedString = new String(decodedBytes);
-		} catch (final Exception e) {
-			throw new InputException(e);
+		final var openVPN_ConfigData_Base64 = params[14];
+		if (openVPN_ConfigData_Base64 == null || openVPN_ConfigData_Base64.isEmpty()) {
+			throw new InputException("openVPN_ConfigData_Base64==null");
 		}
+
+		byte[] decodedBytes;
+		try {
+			decodedBytes = Base64.getDecoder().decode(openVPN_ConfigData_Base64);
+		} catch (final java.lang.IllegalArgumentException e) {
+			throw new InputException("base64", e);
+		}
+		final var decodedString = new String(decodedBytes);
 		final var vpnConf = OVPNReader.read(decodedString);
-		vpnConf.id = id;
+		vpnConf.id = params[0];
+		final var host = params[1];
+		if (host == null || host.isEmpty()) {
+			throw new InputException("host==null");
+		}
 		vpnConf.host = host;
-		vpnConf.speed = speed;
-		vpnConf.countryLong = countryLong;
-		vpnConf.countryShort = countryShort;
-		vpnConf.ping = ping;
-		vpnConf.score = score;
-		vpnConf.numVpnSessions = numVpnSessions;
-		vpnConf.uptime = uptime;
-		vpnConf.totalUsers = totalUsers;
-		vpnConf.totalTraffic = totalTraffic;
-		vpnConf.logType = logType;
-		vpnConf.operator = operator;
-		vpnConf.message = message;
+		vpnConf.speed = Long.parseLong(params[4]);
+
+		final var countryLongTmp = params[5];
+		if (countryLongTmp == null || countryLongTmp.isEmpty()) {
+			throw new InputException("countryLongTmp==null");
+		}
+		final var countryShortTmp = params[6];
+		if (countryShortTmp == null || countryShortTmp.isEmpty()) {
+			throw new InputException("countryShortTmp==null");
+		}
+		vpnConf.countryLong = countryLongTmp;
+		vpnConf.countryShort = countryShortTmp;
+		if (!"-".equals(params[3])) {
+			vpnConf.ping = Integer.parseInt(params[3]);
+		}
+		vpnConf.score = Integer.parseInt(params[2]);
+		vpnConf.numVpnSessions = Integer.parseInt(params[7]);
+		vpnConf.uptime = params[8];
+		vpnConf.totalUsers = Integer.parseInt(params[9]);
+		vpnConf.totalTraffic = Long.parseLong(params[10]);
+		vpnConf.logType = params[11];// 2weeks
+		vpnConf.operator = params[12];
+		vpnConf.message = params[13];
 		return vpnConf;
 	}
 

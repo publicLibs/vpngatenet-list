@@ -104,8 +104,16 @@ public class OVPNReader {
 				}
 			} else {
 				if ("remote".equals(paramKey)) {
-					ovpnConf.host = paramData[1];
-					ovpnConf.port = Integer.parseInt(paramData[2]);
+					final var tmpHost = paramData[1];
+					if (tmpHost == null || tmpHost.isEmpty()) {
+						throw new InputException("remote host");
+					}
+					final var tmpPort = Integer.parseInt(paramData[2]);
+					if (tmpPort < 0 || tmpPort > 65535) {
+						throw new InputException("remote host");
+					}
+					ovpnConf.host = tmpHost;
+					ovpnConf.port = tmpPort;
 					continue;
 				}
 				throw new UnsupportedOperationException(Arrays.toString(paramData));

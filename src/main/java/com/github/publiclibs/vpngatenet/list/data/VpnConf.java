@@ -9,7 +9,7 @@ package com.github.publiclibs.vpngatenet.list.data;
  */
 public class VpnConf {
 	// site-start
-	public int ping;
+	public int ping = -1;
 
 	public int score;
 

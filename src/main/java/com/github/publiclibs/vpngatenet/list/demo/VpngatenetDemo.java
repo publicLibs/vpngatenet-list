@@ -6,11 +6,10 @@ package com.github.publiclibs.vpngatenet.list.demo;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.GeneralSecurityException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.github.publiclibs.vpngatenet.list.VpnGateNetFetcher;
 import com.github.publiclibs.vpngatenet.list.utils.VpnConfUtils;
-import com.github.publiclibs.vpngatenet.list.utils.VpnGateNetFetcher;
 
 /**
  * @author freedom1b2830
@@ -22,10 +21,10 @@ public class VpngatenetDemo {
 	 * @param args
 	 * @throws IOException
 	 */
-	public static void main(final String[] args) throws IOException, GeneralSecurityException {
+	public static void main(final String[] args) throws IOException {
+
 		final var fastStream = VpnGateNetFetcher.fetchFast();
 		final var a = new AtomicInteger();
-
 		fastStream.forEachOrdered((final var conf) -> {
 
 			final var fName = a.getAndIncrement() + "-" + conf.speed + "-" + conf.countryShort + "-" + conf.proto + "-"

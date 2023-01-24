@@ -19,19 +19,19 @@ public class JazzerDebug {
 		final var conf = VpnConfUtils.parseCSV(fullCsv);
 		final var key = KeyUtils.getPrivateKeyFromString(conf.privKey);
 		final var keyFormat = key.getFormat();
-		keyFormat.getClass();
+		System.out.println(keyFormat);
 	}
 
 	public static void main(final String[] args) throws IOException, InterruptedException {
 		Jazzer.main(new String[] {
 
-				"--keep_going=2000",
+				"--keep_going=10000",
 
-				"-detect_leaks=1",
+				"-detect_leaks=1"
 
-				"--autofuzz=com.github.publiclibs.vpngatenet.list.debugpackage.JazzerDebug::fullTest1",
+				, "--autofuzz=com.github.publiclibs.vpngatenet.list.debugpackage.JazzerDebug::fullTest1"
 
-				"--autofuzz_ignore=com.github.publiclibs.vpngatenet.list.exceptions.InputException"
+				, "--autofuzz_ignore=com.github.publiclibs.vpngatenet.list.exceptions.InputException"
 
 		});
 
