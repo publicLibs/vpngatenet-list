@@ -135,9 +135,9 @@ public class VpnConfUtils {
 			ovpnBuilder.append("verb").append(' ').append(conf.verb).append('\n');
 		}
 
-		ovpnBuilder.append("<ca>").append(conf.ca).append("</ca>").append('\n');
-		ovpnBuilder.append("<cert>").append(conf.cert).append("</cert>").append('\n');
-		ovpnBuilder.append("<key>").append(conf.privKey).append("</key>").append('\n');
+		ovpnBuilder.append("<ca>").append(conf.ca).append('\n').append("</ca>").append('\n');
+		ovpnBuilder.append("<cert>").append(conf.cert).append('\n').append("</cert>").append('\n');
+		ovpnBuilder.append("<key>").append(conf.privKey).append('\n').append("</key>").append('\n');
 		return ovpnBuilder.toString();
 	}
 }
