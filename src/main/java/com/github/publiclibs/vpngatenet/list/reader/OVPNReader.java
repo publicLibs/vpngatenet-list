@@ -95,6 +95,7 @@ public class OVPNReader {
 				switch (paramKey) {
 				case "dev" -> ovpnConf.dev = paramVal;
 				case "cipher" -> ovpnConf.cipher = paramVal;
+				case "data-ciphers" -> ovpnConf.dataCiphers = paramVal;
 				case "auth" -> ovpnConf.auth = paramVal;
 				case "verb" -> ovpnConf.verb = Integer.parseInt(paramVal);
 				case "resolv-retry" -> ovpnConf.resolvretry = paramVal;

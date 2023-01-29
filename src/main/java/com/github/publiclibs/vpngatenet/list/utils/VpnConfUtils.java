@@ -36,7 +36,6 @@ public class VpnConfUtils {
 			}
 		});
 		return streamBuilder.build();
-
 	}
 
 	public static Stream<VpnConf> parseCSV(final Path path) throws IOException {
@@ -117,6 +116,12 @@ public class VpnConfUtils {
 		ovpnBuilder.append("remote").append(' ').append(conf.host).append(' ').append(conf.port).append('\n');
 
 		ovpnBuilder.append("cipher").append(' ').append(conf.cipher).append('\n');
+		if (conf.dataCiphers == null) {
+			ovpnBuilder.append("data-ciphers").append(' ').append(conf.cipher).append('\n');
+		} else {
+			ovpnBuilder.append("data-ciphers").append(' ').append(conf.dataCiphers).append('\n');
+		}
+
 		ovpnBuilder.append("auth").append(' ').append(conf.auth).append('\n');
 		ovpnBuilder.append("resolv-retry").append(' ').append(conf.resolvretry).append('\n');
 		if (conf.nobind) {

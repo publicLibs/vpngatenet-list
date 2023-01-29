@@ -13,6 +13,8 @@ public class VpnConf {
 
 	public int score;
 
+	public String dataCiphers;
+
 	public int numVpnSessions;
 
 	public String uptime;
